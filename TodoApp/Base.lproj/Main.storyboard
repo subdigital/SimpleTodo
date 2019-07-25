@@ -50,7 +50,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="73.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Get Milk from the Store..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZLH-23-k6M">
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Get Milk from the Store..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ZLH-23-k6M">
                                             <rect key="frame" x="20" y="11" width="374" height="52"/>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>

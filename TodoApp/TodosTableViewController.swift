@@ -17,7 +17,7 @@ class TodosTableViewController: UITableViewController {
         }
     }
 
-    var todos: [String] = []
+    var todos: [TodoItem] = []
 
     private weak var newItemTextField: UITextField!
     private let newItemCellIndexPath = IndexPath(row: 0, section: 1)
@@ -30,18 +30,15 @@ class TodosTableViewController: UITableViewController {
 
     private func loadTodos() {
         guard let context = context else { fatalError() }
-        let fetchRequest: NSFetchRequest<TodoItem> = NSFetchRequest(entityName: "TodoItem")
+        let fetchRequest: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortOrder", ascending: true)]
-        context.perform {
-            let todoItems = try! fetchRequest.execute()
-            self.todos = todoItems.map { $0.text }
-            self.tableView.reloadData()
-        }
+        todos = try! context.fetch(fetchRequest)
+        tableView.reloadData()
     }
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {        
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
 
@@ -53,11 +50,10 @@ class TodosTableViewController: UITableViewController {
         }
     }
 
-
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) as! TodoCell
-            cell.label.text = todos[indexPath.row]
+            cell.label.text = todos[indexPath.row].text
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "newItemCell", for: indexPath) as! NewItemCell
@@ -81,29 +77,14 @@ class TodosTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
         let todo = todos.remove(at: fromIndexPath.row)
         todos.insert(todo, at: to.row)
     }
 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath.section == 0 else { return }
 
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
     }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     @IBAction func didTapAdd(_ sender: Any) {
         UIView.animate(withDuration: 0.3, animations: {
@@ -116,7 +97,29 @@ class TodosTableViewController: UITableViewController {
 }
 
 extension TodosTableViewController : UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        print("end editing")
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let context = context else { return false }
+        guard let text = textField.text?.trimmingCharacters(in: .whitespaces), !text.isEmpty else {
+            textField.resignFirstResponder()
+            return false
+        }
+
+        context.perform {
+            let todo = TodoItem(context: context)
+            todo.text = text
+            todo.sortOrder = Int32(self.todos.count)
+            try! context.save()
+
+            self.todos.append(todo)
+            let newIndexPath = IndexPath(row: self.todos.count-1, section: 0)
+
+
+            self.newItemTextField.text = ""
+
+            self.tableView.insertRows(at: [newIndexPath], with: .automatic)
+            self.tableView.scrollToRow(at: self.newItemCellIndexPath, at: .middle, animated: false)
+        }
+
+        return false
     }
 }
