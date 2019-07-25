@@ -13,9 +13,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+
+        PersistenceManager.shared.initializeModel {
+            let rootNav = self.window?.rootViewController as! UINavigationController
+            let todosVC = rootNav.viewControllers.first as! TodosTableViewController
+            todosVC.context = PersistenceManager.shared.mainContext
+        }
+
         return true
     }
 

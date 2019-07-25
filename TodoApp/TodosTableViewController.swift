@@ -7,8 +7,15 @@
 //
 
 import UIKit
+import CoreData
 
 class TodosTableViewController: UITableViewController {
+
+    var context: NSManagedObjectContext? {
+        didSet {
+            loadTodos()
+        }
+    }
 
     var todos: [String] = []
 
@@ -18,17 +25,23 @@ class TodosTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        for i in 0...100 {
-            todos.append("Todo item \(i)")
-        }
-
         tableView.tableFooterView = UIView()
+    }
+
+    private func loadTodos() {
+        guard let context = context else { fatalError() }
+        let fetchRequest: NSFetchRequest<TodoItem> = NSFetchRequest(entityName: "TodoItem")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortOrder", ascending: true)]
+        context.perform {
+            let todoItems = try! fetchRequest.execute()
+            self.todos = todoItems.map { $0.text }
+            self.tableView.reloadData()
+        }
     }
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+    override func numberOfSections(in tableView: UITableView) -> Int {        
         return 2
     }
 
