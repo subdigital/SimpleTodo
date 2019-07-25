@@ -1,0 +1,1 @@
+This is a sample Todo App written in Swift that uses Core Data.
