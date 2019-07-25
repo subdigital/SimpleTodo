@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TodoCell" rowHeight="74" id="2gc-jo-SXJ">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="TodoCell" rowHeight="74" id="2gc-jo-SXJ" customClass="TodoCell" customModule="TodoApp" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="74"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2gc-jo-SXJ" id="lqc-p2-Tjj">
@@ -39,8 +39,11 @@
                                         <constraint firstItem="WOo-dN-umF" firstAttribute="bottom" secondItem="lqc-p2-Tjj" secondAttribute="bottomMargin" id="zun-q2-Lt0"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="label" destination="WOo-dN-umF" id="oHZ-bx-MMg"/>
+                                </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="newItemCell" rowHeight="74" id="jus-PT-lSg" customClass="NewItemCell" customModule="TodoApp" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="newItemCell" rowHeight="74" id="jus-PT-lSg" customClass="NewItemCell" customModule="TodoApp" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="102" width="414" height="74"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jus-PT-lSg" id="xfT-fA-G7N">

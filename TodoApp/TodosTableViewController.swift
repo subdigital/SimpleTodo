@@ -43,7 +43,8 @@ class TodosTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) as! TodoCell
+            cell.label.text = todos[indexPath.row]
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "newItemCell", for: indexPath) as! NewItemCell
@@ -53,33 +54,25 @@ class TodosTableViewController: UITableViewController {
         }
     }
 
-
-    /*
-    // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+        return indexPath.section != newItemCellIndexPath.section
     }
-    */
 
-    /*
-    // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
+            todos.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
 
-    /*
-    // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
 
+        let todo = todos.remove(at: fromIndexPath.row)
+        todos.insert(todo, at: to.row)
     }
-    */
+
 
     /*
     // Override to support conditional rearranging of the table view.
