@@ -32,6 +32,7 @@ class TodosTableViewController: UITableViewController {
         guard let context = context else { fatalError() }
         let fetchRequest: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sortOrder", ascending: true)]
+        fetchRequest.predicate = NSPredicate(format: "isCompleted = NO")
         todos = try! context.fetch(fetchRequest)
         tableView.reloadData()
     }
@@ -53,7 +54,9 @@ class TodosTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) as! TodoCell
-            cell.label.text = todos[indexPath.row].text
+            let todo = todos[indexPath.row]
+            cell.label.text = todo.text
+            cell.strikeThrough = todo.isCompleted
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "newItemCell", for: indexPath) as! NewItemCell
@@ -83,7 +86,10 @@ class TodosTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section == 0 else { return }
-
+        let todo = todos[indexPath.row]
+        todo.isCompleted.toggle()
+        try! context?.save()
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
 
     @IBAction func didTapAdd(_ sender: Any) {
